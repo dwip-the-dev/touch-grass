@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://grasstouch.netlify.app/sitemap.xml
