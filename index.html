@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Touch Grass Simulator 💀</title>
+<style>
+  body {
+    margin: 0;
+    overflow: hidden;
+    background: url('grass.jpg') center/cover no-repeat fixed;
+    height: 100vh;
+    cursor: none;
+  }
+
+  #hand {
+    position: absolute;
+    width: 100px;
+    height: auto;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.05s linear;
+  }
+
+  #message {
+    position: fixed;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 12px;
+    font-family: sans-serif;
+    font-size: 18px;
+    display: none;
+  }
+
+  #soundButton {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    background: rgba(0,0,0,0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  #soundButton img {
+    width: 22px;
+    height: 22px;
+    filter: invert(1);
+  }
+</style>
+</head>
+<body>
+  <img id="hand" src="hand.png" alt="hand">
+  <audio id="grassSound" src="sound.mp3" loop></audio>
+  <div id="message">🌿 Grass touched successfully 💀</div>
+
+  <div id="soundButton">
+    <img id="soundIcon" src="https://cdn-icons-png.flaticon.com/512/727/727240.png" alt="sound on">
+  </div>
+
+  <script>
+    const hand = document.getElementById("hand");
+    const message = document.getElementById("message");
+    const sound = document.getElementById("grassSound");
+    const soundButton = document.getElementById("soundButton");
+    const soundIcon = document.getElementById("soundIcon");
+
+    let isPlaying = false;
+
+    document.addEventListener("mousemove", (e) => {
+      hand.style.left = `${e.clientX}px`;
+      hand.style.top = `${e.clientY}px`;
+    });
+
+    document.addEventListener("touchmove", (e) => {
+      const touch = e.touches[0];
+      hand.style.left = `${touch.clientX}px`;
+      hand.style.top = `${touch.clientY}px`;
+    });
+
+    function showMessage() {
+      message.style.display = "block";
+      message.style.opacity = 1;
+      setTimeout(() => {
+        message.style.opacity = 0;
+        setTimeout(() => (message.style.display = "none"), 500);
+      }, 1500);
+    }
+
+    document.addEventListener("click", showMessage);
+    document.addEventListener("touchstart", showMessage);
+
+    soundButton.addEventListener("click", () => {
+      if (!isPlaying) {
+        sound.play().then(() => {
+          isPlaying = true;
+          soundIcon.src = "https://cdn-icons-png.flaticon.com/512/727/727240.png";
+        }).catch(() => {
+          console.log("User interaction required");
+        });
+      } else {
+        sound.pause();
+        isPlaying = false;
+        soundIcon.src = "https://cdn-icons-png.flaticon.com/512/727/727269.png";
+      }
+    });
+
+    document.addEventListener("click", () => {
+      if (!isPlaying) {
+        sound.play().then(() => {
+          isPlaying = true;
+        }).catch(() => {});
+      }
+    }, { once: true });
+  </script>
+</body>
+</html>
